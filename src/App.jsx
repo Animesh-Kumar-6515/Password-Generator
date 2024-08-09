@@ -8,22 +8,26 @@ function App() {
 
   const [length, setLength] =useState(8);
   let [number, numberAllowed]= useState(false);
+  let [charc,charcAllowed]=useState(false);
   const [password, setPassword]= useState("45");
 
   const passwordGenerator= useCallback(()=>{ 
     let pass="";
     let str="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    if (number) str += "0123456789"
+    
+    if (number) str += "0123456789";
+    if (charc) str += "!@#$%^&*()_+{}[]:";
     for(let i=1;i<=length;i++){
       let char=Math.floor(Math.random()* str.length+1)
       pass+=str.charAt(char);
     }
     setPassword(pass);
-  },[length,number,setPassword])
+    // console.log(charc);
+  },[length,number,charc,setPassword])
 
   useEffect(()=>{
     passwordGenerator()
-  },[length,number,passwordGenerator])
+  },[length,number,charc,passwordGenerator])
 
 
   const passwordRef = useRef(null);
@@ -91,6 +95,18 @@ function App() {
               }}
               />
               <label> Numbers</label>
+          </div>
+          <div className='flex items-center gap-x-1'>
+              <input 
+              type="checkbox"
+              defaultChecked={charcAllowed}
+              id='charcterInput'
+              onChange={()=>{
+                charcAllowed((prev)=>!prev);
+                console.log(charc)
+              }}
+              />
+              <label>Character</label>
           </div>
           <div className='flex items-center gap-x-1'>
               <button onClick={passwordGenerator}> Generate</button>
